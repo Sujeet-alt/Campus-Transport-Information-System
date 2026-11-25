@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>LPU Bus Routes</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f2f2f2;
+      margin: 0;
+      padding: 20px;
+    }
+    .box {
+      max-width: 800px;
+      margin: auto;
+      background: white;
+      padding: 20px;
+      border-radius: 10px;
+    }
+    h1 { color: #e65c00; }
+    input {
+      width: 95%;
+      padding: 12px;
+      margin: 10px 0;
+    }
+    button {
+      padding: 10px 14px;
+      margin: 4px;
+      border: 0;
+      background: #e65c00;
+      color: white;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    .bus {
+      background: #f7f7f7;
+      padding: 12px;
+      margin: 10px 0;
+      border-left: 4px solid #e65c00;
+    }
+    a { color: #e65c00; }
+    .note { color: #666; font-size: 14px; }
+  </style>
+</head>
+<body>
+  <div class="box">
+    <h1>LPU Bus Routes</h1>
+    <p>Find a bus route, check its timing or contact the driver.</p>
+    <input type="text" id="search" placeholder="Search by area or bus number">
+    <br>
+    <button onclick="showRoutes()">Routes</button>
+    <button onclick="showDrivers()">Driver details</button>
+    <div id="content"></div>
+    <p class="note">This is sample information for a college project.</p>
+  </div>
+  <script>
+    var buses = [
+      {
+        number: "12",
+        area: "Jalandhar",
+        driver: "Balwinder Singh",
+        phone: "+919876500011",
+        stops: ["Jalandhar Bus Stand", "BMC Chowk", "LPU Main Gate", "Block 32"],
+        times: ["6:45 AM", "6:53 AM", "7:55 AM", "8:01 AM"]
+      },
+      {
+        number: "15",
+        area: "Phagwara",
+        driver: "Sukhdev Lal",
+        phone: "+919876500012",
+        stops: ["Phagwara Bus Stand", "Gole Market", "Hadiabad", "LPU Main Gate"],
+        times: ["7:30 AM", "7:36 AM", "7:44 AM", "7:58 AM"]
+      },
+      {
+        number: "21",
+        area: "Ludhiana",
+        driver: "Manjit Singh",
+        phone: "+919876500013",
+        stops: ["Ludhiana Bus Stand", "Clock Tower", "Ladhowal", "LPU Main Gate"],
+        times: ["6:15 AM", "6:25 AM", "6:41 AM", "7:37 AM"]
+      },
+      {
+        number: "27",
+        area: "Kapurthala",
+        driver: "Ramesh Kumar",
+        phone: "+919876500014",
+        stops: ["Kapurthala Chowk", "Dhilwan", "Hadiabad", "LPU Main Gate"],
+        times: ["7:00 AM", "7:24 AM", "7:38 AM", "7:52 AM"]
+      }
+    ];
+    function showRoutes() {
+      var text = document.getElementById("search").value.toLowerCase();
+      var result = "";
+      var found = false;
+      for (var i = 0; i < buses.length; i++) {
+        var bus = buses[i];
+        var allStops = bus.stops.join(" ").toLowerCase();
+
+        if (bus.area.toLowerCase().includes(text) ||
+            bus.number.includes(text) || allStops.includes(text)) {
+          found = true;
+          result += "<div class='bus'>";
+          result += "<h3>Bus " + bus.number + " - " + bus.area + "</h3>";
+          result += "<p>Stops: " + bus.stops.join(", ") + "</p>";
+          result += "<button onclick='showTimes(" + i + ")'>";
+          result += "See timings</button></div>";
+        }
+      }
+      if (found == false) {
+        result = "<p>No bus found. Try another area or number.</p>";
+      }
+      document.getElementById("content").innerHTML = result;
+    }
+    function showTimes(busIndex) {
+      var bus = buses[busIndex];
+      var result = "<h2>Bus " + bus.number + " timings</h2>";
+      for (var i = 0; i < bus.stops.length; i++) {
+        result += "<div class='bus'>";
+        result += bus.stops[i] + " - " + bus.times[i];
+        result += "</div>";
+      }
+      result += "<button onclick='showRoutes()'>Back to routes</button>";
+      document.getElementById("content").innerHTML = result;
+    }
+    function showDrivers() {
+      var result = "<h2>Driver details</h2>";
+      for (var i = 0; i < buses.length; i++) {
+        result += "<div class='bus'>";
+        result += "<b>Bus " + buses[i].number + " - ";
+        result += buses[i].driver + "</b><br>";
+        result += "Area: " + buses[i].area + "<br>";
+        result += "<a href='tel:" + buses[i].phone + "'>Call driver</a>";
+        result += "</div>";
+      }
+      document.getElementById("content").innerHTML = result;
+    }
+    showRoutes();
+  </script>
+</body>
+</html>
